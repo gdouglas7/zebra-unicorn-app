@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   vote:
-    build: .
+    build: ./vote
     container_name: vote
     ports:
       - "8080:8080"
