@@ -16,9 +16,6 @@ repositories {
 }
 
 dependencies {
-//	implementation("org.springframework.boot:spring-boot-starter-data-redis") {
-//		exclude(group = "io.lettuce", module = "lettuce-core")
-//	}
 	implementation("redis.clients:jedis")
 
 	implementation("org.springframework.boot:spring-boot-starter-web")
