@@ -1,54 +1,57 @@
 package com.gd.zebraunicornapp
 
+import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
-import redis.clients.jedis.Jedis
 
 @Service
 class ChoiceService(
-    private val choiceRepository: ChoiceRepository
+    private val choiceRepository: ChoiceRepository,
+    private val redisTemplate: RedisTemplate<String, String>
 ) {
 
     @Scheduled(fixedRate = 3000)
     fun fixedRateScheduledTask() {
 
-        val jedis = Jedis("redis", 6379)
-
         val vote = "ranking_vote"
-        val zebra = "zebra"
-        val unicorn = "unicorn"
-        val other = "other"
 
         runCatching {
             while(true){
-                val zebraScore = with(jedis.zscore(vote, zebra)){ this ?: 0.0 }
-                val unicornScore = with(jedis.zscore(vote, unicorn)){ this ?: 0.0 }
-                val otherScore = with(jedis.zscore(vote, other)){ this ?: 0.0 }
+                val zebraScore = with(redisTemplate.opsForZSet().score(vote, ChoiceEnum.ZEBRA.key)){ this ?: 0.0 }
+                val unicornScore = with(redisTemplate.opsForZSet().score(vote, ChoiceEnum.UNICORN.key)){ this ?: 0.0 }
+                val otherScore = with(redisTemplate.opsForZSet().score(vote, ChoiceEnum.OTHER.key)){ this ?: 0.0 }
 
-                val zebraChoice = choiceRepository.findByName(zebra)?.copy(score = zebraScore.toInt())
+                val zebraChoiceEnum = choiceRepository.findByName(ChoiceEnum.ZEBRA.key)
+                    ?.copy(score = zebraScore.toInt())
                     ?: Choice(
-                        name = zebra,
+                        name = ChoiceEnum.ZEBRA.key,
                         score = zebraScore.toInt()
                     )
-                choiceRepository.save(zebraChoice)
+                choiceRepository.save(zebraChoiceEnum)
 
-                val unicornChoice = choiceRepository.findByName(unicorn)?.copy(score = unicornScore.toInt())
+                val unicornChoiceEnum = choiceRepository.findByName(ChoiceEnum.UNICORN.key)
+                    ?.copy(score = unicornScore.toInt())
                     ?: Choice(
-                        name = unicorn,
+                        name = ChoiceEnum.UNICORN.key,
                         score = unicornScore.toInt()
                     )
-                choiceRepository.save(unicornChoice)
+                choiceRepository.save(unicornChoiceEnum)
 
-                val otherChoice = choiceRepository.findByName(other)?.copy(score = otherScore.toInt())
+                val otherChoiceEnum = choiceRepository.findByName(ChoiceEnum.OTHER.key)
+                    ?.copy(score = otherScore.toInt())
                     ?: Choice(
-                        name = other,
+                        name = ChoiceEnum.OTHER.key,
                         score = otherScore.toInt()
                     )
-                choiceRepository.save(otherChoice)
+                choiceRepository.save(otherChoiceEnum)
 
             }
         }.onFailure {
             println("failure: $it")
         }
     }
+}
+
+enum class ChoiceEnum(val id: Int, val key: String) {
+    ZEBRA(1, "zebra"), UNICORN(2, "unicorn"), OTHER(3, "other");
 }

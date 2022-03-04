@@ -1,39 +1,36 @@
 package com.gd.zebraunicornapp
 
+import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import redis.clients.jedis.Jedis
 
-
-@RequestMapping("/api")
+@RequestMapping("/result")
 @RestController
 class ResultController(
-    private val choiceRepository: ChoiceRepository
+    private val choiceRepository: ChoiceRepository,
+    private val redisTemplate: RedisTemplate<String, String>
 ) {
 
-    @GetMapping("/cache-ranking")
+    @GetMapping("/ranking")
     fun cacheRanking(): ResponseEntity<Map<String, Any>> {
 
-        val jedis = Jedis("redis", 6379)
         val vote = "ranking_vote"
-        val zebra = "zebra"
-        val unicorn = "unicorn"
-        val other = "other"
 
         val list = mapOf(
-            zebra to jedis.zrank(vote, zebra),
-            unicorn to jedis.zrank(vote, unicorn),
-            other to jedis.zrank(vote, other),
+            ChoiceEnum.ZEBRA.key to with(redisTemplate.opsForZSet().reverseRank(vote, ChoiceEnum.ZEBRA.key)){ this ?: 0 } + 1,
+            ChoiceEnum.UNICORN.key to with(redisTemplate.opsForZSet().reverseRank(vote, ChoiceEnum.UNICORN.key)){ this ?: 0 } + 1,
+            ChoiceEnum.OTHER.key to with(redisTemplate.opsForZSet().reverseRank(vote, ChoiceEnum.OTHER.key)){ this ?: 0 } + 1,
         )
 
         return ResponseEntity.ok(list)
     }
 
-    @GetMapping("/ranking")
+    @GetMapping("/votes")
     fun ranking() =  ResponseEntity.ok(choiceRepository.findAll())
+}
 
-    @GetMapping("/test")
-    fun teste() =  ResponseEntity.ok("test")
+enum class ChoiceEnum(val id: Int, val key: String) {
+    ZEBRA(1, "zebra"), UNICORN(2, "unicorn"), OTHER(3, "other");
 }

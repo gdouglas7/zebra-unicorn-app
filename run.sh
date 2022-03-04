@@ -1,8 +1,8 @@
 cd result
-./gradlew build
+./gradlew clean build
 cd ../vote
-./gradlew build
+./gradlew clean build
 cd ../worker
-./gradlew build
+./gradlew clean build
 
 docker-compose up -d --build

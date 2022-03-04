@@ -1,42 +1,29 @@
 package com.gd.zebraunicornapp
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.redis.core.RedisTemplate
-import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import redis.clients.jedis.Jedis
 
 
-@RequestMapping("/api")
+@RequestMapping("/vote")
 @RestController
 class VoteController(
     private val redisTemplate: RedisTemplate<String, String>
 ) {
 
     @PostMapping
-    fun vote(option: Int){
-
-
+    fun vote(choice: Choice){
 
         val vote = "ranking_vote"
-        val zebra = "zebra"
-        val unicorn = "unicorn"
-        val other = "other"
-
-        if (option == 1){
-            redisTemplate.opsForZSet().incrementScore(zebra, score, 1.0)
-        }else if(option == 2){
-            val score = with(jedis.zscore(vote, unicorn)){ this ?: 0.0 }
-            jedis.zadd(vote, score + 1, unicorn)
-        }else{
-            val score = with(jedis.zscore(vote, other)){ this ?: 0.0 }
-            jedis.zadd(vote, score + 1, other)
+        when (choice) {
+            Choice.ZEBRA -> { redisTemplate.opsForZSet().incrementScore(vote, Choice.ZEBRA.key, 1.0) }
+            Choice.UNICORN ->redisTemplate.opsForZSet().incrementScore(vote, Choice.UNICORN.key, 1.0)
+            else -> redisTemplate.opsForZSet().incrementScore(vote, Choice.OTHER.key, 1.0)
         }
     }
+}
 
-    @GetMapping("/test")
-    fun teste() =  ResponseEntity.ok("test")
+enum class Choice(val id: Int, val key: String) {
+    ZEBRA(1, "zebra"), UNICORN(2, "unicorn"), OTHER(3, "other");
 }

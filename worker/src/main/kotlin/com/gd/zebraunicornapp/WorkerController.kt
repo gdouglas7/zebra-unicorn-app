@@ -6,11 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 
-@RequestMapping("/api")
+@RequestMapping("/worker")
 @RestController
-class WorkerController(
-    private val choiceRepository: ChoiceRepository
-) {
+class WorkerController {
 
     @GetMapping("/test")
     fun teste() =  ResponseEntity.ok("test")
