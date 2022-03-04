@@ -1,5 +1,7 @@
 package com.gd.zebraunicornapp
 
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -10,20 +12,22 @@ import redis.clients.jedis.Jedis
 
 @RequestMapping("/api")
 @RestController
-class VoteController {
+class VoteController(
+    private val redisTemplate: RedisTemplate<String, String>
+) {
 
     @PostMapping
     fun vote(option: Int){
 
-        val jedis = Jedis("redis", 6379)
+
+
         val vote = "ranking_vote"
         val zebra = "zebra"
         val unicorn = "unicorn"
         val other = "other"
 
         if (option == 1){
-            val score = with(jedis.zscore(vote, zebra)){ this ?: 0.0 }
-            jedis.zadd(vote, score + 1, zebra)
+            redisTemplate.opsForZSet().incrementScore(zebra, score, 1.0)
         }else if(option == 2){
             val score = with(jedis.zscore(vote, unicorn)){ this ?: 0.0 }
             jedis.zadd(vote, score + 1, unicorn)
@@ -32,7 +36,6 @@ class VoteController {
             jedis.zadd(vote, score + 1, other)
         }
     }
-
 
     @GetMapping("/test")
     fun teste() =  ResponseEntity.ok("test")

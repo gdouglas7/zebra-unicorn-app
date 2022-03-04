@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+  
   vote:
     build: ./vote
     container_name: vote
@@ -10,9 +11,3 @@ services:
   redis:
     image: redis:3.2
     container_name: redis
-
-  result:
-    build: ./result
-    container_name: result
-    ports:
-      - "8081:8080"

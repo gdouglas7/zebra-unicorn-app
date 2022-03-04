@@ -1,1 +1,1 @@
-rootProject.name = "zebra-unicorn-app"
+rootProject.name = "result-app"

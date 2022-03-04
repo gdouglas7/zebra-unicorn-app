@@ -2,5 +2,4 @@
 
 ### To build and run
 
-`./gradlew build`  
-`docker-compose up -d --build`  
+#### In the root of the project: `./run.sh`  
