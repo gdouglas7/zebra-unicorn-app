@@ -3,27 +3,25 @@ version: '3.8'
 services:
   
   vote:
-    build: ./vote
-    container_name: vote
+    image: gdouglas7/zebra-unicorn-app_vote:0.0.1
     ports:
       - "8080:8080"
-    depends_on:
-      redis:
-        condition: service_healthy 
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
     networks:
       - zebra-unicorn-network
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 2
+      restart_policy:
+        condition: on-failure
 
   result:
-    build: ./result
-    container_name: result
+    image: gdouglas7/zebra-unicorn-app_result:0.0.1
     ports:
       - "8081:8080"
-    depends_on:
-      postgres:
-        condition: service_healthy
     environment:
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
@@ -32,17 +30,18 @@ services:
       - POSTGRES_PASSWORD=postgres
     networks:
       - zebra-unicorn-network
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
 
   worker:
-    build: ./worker
-    container_name: worker
+    image: gdouglas7/zebra-unicorn-app_worker:0.0.1
     ports:
       - "8082:8080"
-    depends_on:
-      redis:
-        condition: service_healthy 
-      postgres:
-        condition: service_healthy 
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
@@ -53,25 +52,36 @@ services:
       - POSTGRES_PASSWORD=postgres
     networks:
       - zebra-unicorn-network
+    deploy:
+      mode: replicated
+      replicas: 1
+      labels: [APP=VOTING]
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 3
+        window: 120s
+      placement:
+        constraints: [node.role == manager]
   
   redis:
     image: redis:3.2
-    container_name: redis
     volumes:
       - type: volume
         source: redis-data
         target: /data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 1s
-      timeout: 3s
-      retries: 15
     networks:
       - zebra-unicorn-network
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
 
   postgres:
     image: postgres:9.4
-    container_name: postgres
     environment:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
@@ -80,13 +90,24 @@ services:
       - type: volume
         source: db-data
         target: /var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
     networks:
       - zebra-unicorn-network
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  visualizer:
+    image: dockersamples/visualizer
+    ports:
+      - "8083:8080"
+    stop_grace_period: 1m30s
+    volumes:
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+    deploy:
+      placement:
+        constraints: [node.role == manager]
     
 volumes:
   redis-data:

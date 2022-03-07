@@ -16,5 +16,6 @@ data class Choice(
     val id: String? = null,
 
     val name: String? = null,
-    val score: Int? = null
+    val score: Int? = null,
+    val position: Int? = null
 )

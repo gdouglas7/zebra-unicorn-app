@@ -17,31 +17,39 @@ class ChoiceService(
 
         runCatching {
             while(true){
+
+                val zebraPosition = with(redisTemplate.opsForZSet().reverseRank(vote, ChoiceEnum.ZEBRA.key)){ this ?: 0 } + 1
+                val unicornPosition = with(redisTemplate.opsForZSet().reverseRank(vote, ChoiceEnum.UNICORN.key)){ this ?: 0 } + 1
+                val otherPosition = with(redisTemplate.opsForZSet().reverseRank(vote, ChoiceEnum.OTHER.key)){ this ?: 0 } + 1
+
                 val zebraScore = with(redisTemplate.opsForZSet().score(vote, ChoiceEnum.ZEBRA.key)){ this ?: 0.0 }
                 val unicornScore = with(redisTemplate.opsForZSet().score(vote, ChoiceEnum.UNICORN.key)){ this ?: 0.0 }
                 val otherScore = with(redisTemplate.opsForZSet().score(vote, ChoiceEnum.OTHER.key)){ this ?: 0.0 }
 
                 val zebraChoiceEnum = choiceRepository.findByName(ChoiceEnum.ZEBRA.key)
-                    ?.copy(score = zebraScore.toInt())
+                    ?.copy(score = zebraScore.toInt(), position = zebraPosition.toInt())
                     ?: Choice(
                         name = ChoiceEnum.ZEBRA.key,
-                        score = zebraScore.toInt()
+                        score = zebraScore.toInt(),
+                        position = zebraPosition.toInt()
                     )
                 choiceRepository.save(zebraChoiceEnum)
 
                 val unicornChoiceEnum = choiceRepository.findByName(ChoiceEnum.UNICORN.key)
-                    ?.copy(score = unicornScore.toInt())
+                    ?.copy(score = unicornScore.toInt(), position = unicornPosition.toInt())
                     ?: Choice(
                         name = ChoiceEnum.UNICORN.key,
-                        score = unicornScore.toInt()
+                        score = unicornScore.toInt(),
+                        position = unicornPosition.toInt()
                     )
                 choiceRepository.save(unicornChoiceEnum)
 
                 val otherChoiceEnum = choiceRepository.findByName(ChoiceEnum.OTHER.key)
-                    ?.copy(score = otherScore.toInt())
+                    ?.copy(score = otherScore.toInt(), position = otherPosition.toInt())
                     ?: Choice(
                         name = ChoiceEnum.OTHER.key,
-                        score = otherScore.toInt()
+                        score = otherScore.toInt(),
+                        position = otherPosition.toInt()
                     )
                 choiceRepository.save(otherChoiceEnum)
 

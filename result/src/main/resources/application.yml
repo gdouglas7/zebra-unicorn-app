@@ -14,10 +14,6 @@ spring:
             non_contextual_creation: 'true'
     hibernate:
       ddl-auto: create
-  redis:
-    database: '0'
-    host: ${REDIS_HOST}
-    port: ${REDIS_PORT}
 
   mvc:
     pathmatch:
