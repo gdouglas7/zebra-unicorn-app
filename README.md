@@ -28,7 +28,7 @@ The images used in the docker-stack are publics in docker.hub. Then execute the 
 
 ### How to access the apps locally:
 Vote, [here](http://localhost:8080/api/swagger-ui.html). Result, [here](http://localhost:8081/api/swagger-ui.html).  
-Visualizer, an interface for look the docker nodes in Docker Swarm is provided [here](http://localhost:8083)
+Visualizer, an interface for looking the docker nodes in Docker Swarm is provided [here](http://localhost:8083)
 
 
 
