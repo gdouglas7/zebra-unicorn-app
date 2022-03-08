@@ -15,9 +15,9 @@ More info of Zebras companies you can find [here](https://zebrasunite.mn.co/).
 ### Functionality and Stack
 - The functionality of the app is just for to choice which kind of thinking do you identify the most: Zebras or Unicorn.
 - The services were building with Kotlin, Spring boot, Gradle and others libs.
-- The vote-app receive the vote and store on Redis. The worker-app read the data from Redis with simple scheduler that run in each 3secs and store it in Postgres. The result-app show the ranking result getting it from Postgres.
-- The Redis and Postgres containers are made of official images.
-- Interfaces for voting and viewing the result are provided for the Swagger Interface.
+- The vote-app receive the vote and store it on Redis. The worker-app read the data from Redis with simple scheduler that run in each 3secs and store it in Postgres. The result-app show the ranking result getting it from Postgres.
+- The Redis and Postgres containers are building with official images.
+- Interfaces for voting and viewing the result are provided for Swagger Interfaces.
 
 ### How build and run:
 For run locally we need to run `./gradlew build` in each app folder(vote/worker/result) before run `docker-compose up -d`, or in the root of the projet just run `./run.sh`
@@ -31,6 +31,9 @@ Vote, [here](http://localhost:8080/api/swagger-ui.html). Result, [here](http://l
 Visualizer, an interface for looking the docker nodes in Docker Swarm is provided [here](http://localhost:8083)
 
 
+### References
+
+The project inspiration comes from the course [Docker Mastery](https://www.udemy.com/course/docker-mastery/)
 
 
 
