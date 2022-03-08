@@ -28,15 +28,15 @@ The images used in the docker-stack are publics in docker.hub. Then execute the 
 
 ### How to access the apps locally:
 - For voting, you can access, [here](http://localhost:8080/api/swagger-ui.html) and try the api `/api/vote` like the image below.  
-![vote request example](./docs/vote.png)
+![vote request example](./docs/vote.PNG)
 
 - For look at the result, you can access [here](http://localhost:8081/api/swagger-ui.html) and try the api `/api/result/votes` like the image below.
-![result request example](./docs/result.png)
+![result request example](./docs/result.PNG)
 
 - There's a visualizer too, an interface for looking the docker nodes in Docker Swarm and you can access it [here](http://localhost:8083). The image below show the interface in localhost
-![localhost-visualizer](./docs/localhost-visualizer.png)
+![localhost-visualizer](./docs/localhost-visualizer.PNG)
 The image below show all the nodes running in 3 differents machines in Digital Ocean. In this case all the machines are managers.
-![digital-ocean-visualizer](./docs/digital-ocean-visualizer.png)
+![digital-ocean-visualizer](./docs/digital-ocean-visualizer.PNG)
 
 ### References
 
