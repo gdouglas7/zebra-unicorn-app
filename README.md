@@ -9,7 +9,7 @@ The name comes from the start up universe, where we have unicorns start ups, com
 More info of Zebras companies you can find [here](https://zebrasunite.mn.co/).
 
 ### Architecture:
-![Architecture diagram](architecture.png)
+![Architecture diagram](./docs/architecture.png)
 
 
 ### Functionality and Stack
@@ -28,10 +28,10 @@ The images used in the docker-stack are publics in docker.hub. Then execute the 
 
 ### How to access the apps locally:
 - For voting, you can access, [here](http://localhost:8080/api/swagger-ui.html) and try the api `/api/vote` like the image below.  
-![vote](./docs/vote.png)
+![vote request example](./docs/vote.png)
 
 - For look at the result, you can access [here](http://localhost:8081/api/swagger-ui.html) and try the api `/api/result/votes` like the image below.
-![vote](./docs/result.png)
+![result request example](./docs/result.png)
 
 - There's a visualizer too, an interface for looking the docker nodes in Docker Swarm and you can access it [here](http://localhost:8083). The image below show the interface in localhost
 ![localhost-visualizer](./docs/localhost-visualizer.png)
