@@ -9,13 +9,14 @@ The name comes from the start up universe, where we have unicorns start ups, com
 More info of Zebras companies you can find [here](https://zebrasunite.mn.co/).
 
 ### Architecture:
-![Architecture image](https://github.com/[username]/[reponame]/blob/[branch]/architecture.png?raw=true)
+![Architecture diagram](architecture.png)
 
 
 ### Functionality and Stack
 - The functionality of the app is just for to choice which kind of thinking do you identify the most: Zebras or Unicorn.
 - The services were building with Kotlin, Spring boot, Gradle and others libs.
-- The worker app make your job with simple scheduler that run in each 3secs.
+- The vote-app receive the vote and store on Redis. The worker-app read the data from Redis with simple scheduler that run in each 3secs and store it in Postgres. The result-app show the ranking result getting it from Postgres.
+- The Redis and Postgres containers are made of official images.
 - Interfaces for voting and viewing the result are provided for the Swagger Interface.
 
 ### How build and run:
