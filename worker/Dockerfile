@@ -1,8 +1,13 @@
 FROM openjdk:8-jre-alpine
 ARG JAR_FILE=build/libs/*.jar
+ARG APP_DIR=/app
 
-WORKDIR /app
-COPY ${JAR_FILE} worker-app.jar
+WORKDIR ${APP_DIR}
+COPY ${JAR_FILE} ${APP_DIR}/worker-app.jar
+
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+RUN chown -R appuser ${APP_DIR}
+USER appuser
+
 EXPOSE 8080
-
 CMD ["java", "-jar", "worker-app.jar"]
