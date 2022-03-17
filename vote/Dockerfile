@@ -6,9 +6,11 @@ ARG APP_DIR=/app
 WORKDIR ${APP_DIR}
 COPY ${JAR_FILE} ${APP_DIR}/vote-app.jar
 
-RUN addgroup -S appgroup && adduser -S appuser -G appgroup
-RUN chown -R appuser ${APP_DIR}
-USER appuser
+RUN addgroup -S appgroup \
+    && adduser -S appuser -G appgroup \
+    && chown -R appuser ${APP_DIR}
 
+USER appuser
 EXPOSE 8080
+
 CMD ["java", "-jar", "vote-app.jar"]
