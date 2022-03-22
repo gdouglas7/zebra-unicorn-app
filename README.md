@@ -19,7 +19,7 @@ More info of Zebras companies you can find [here](https://zebrasunite.mn.co/).
 - The Redis and Postgres containers are building with official images.
 - Interfaces for voting and viewing the result are provided for Swagger Interfaces.
 
-### How build and run:
+### How to build and run:
 For run locally we need to run `./gradlew build` in each app folder(vote/worker/result) before run `docker-compose up -d`, or in the root of the projet just run `./run.sh`
 
 For run with Swarm, active it by running in the terminal: `docker swarm init`.  
