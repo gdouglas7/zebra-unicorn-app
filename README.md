@@ -40,7 +40,7 @@ The image below show all the nodes running in 3 differents machines in Digital O
 
 ### References
 
-The project inspiration comes from the course [Docker Mastery](https://www.udemy.com/course/docker-mastery/)
+The project inspiration comes from the course [Docker Mastery](https://www.udemy.com/course/docker-mastery/)  
 To run with Kubernetes, look at this [REPOSITORY](https://github.com/gdouglas7/k8s-zebra-unicorn-app)
 
 
