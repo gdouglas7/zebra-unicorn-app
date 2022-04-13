@@ -18,3 +18,7 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
+
+management.endpoint.health.probes.enabled: true
+management.health.livenessState.enabled: true
+management.health.readinessState.enabled: true
